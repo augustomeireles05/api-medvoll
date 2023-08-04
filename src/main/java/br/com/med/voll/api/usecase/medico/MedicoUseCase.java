@@ -17,5 +17,5 @@ public interface MedicoUseCase {
 
     Page<DadosListagemMedico> listAllActive(Pageable page);
 
-    void delete(Long id);
+    ResponseEntity delete(Long id);
 }

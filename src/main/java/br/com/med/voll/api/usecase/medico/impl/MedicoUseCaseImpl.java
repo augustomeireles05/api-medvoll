@@ -73,8 +73,22 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
     }
 
     @Override
-    public void delete(Long id) {
-        Medico referenceById = medicoRepository.getReferenceById(id);
-        referenceById.delete();
+    public ResponseEntity delete(Long id) {
+        try {
+            Optional<Medico> optional = medicoRepository.findById(id);
+
+            if (optional.isPresent()) {
+                Medico medicoExistente = optional.get();
+                medicoExistente.delete();
+                medicoRepository.save(medicoExistente);
+
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            log.error(ERROR_SAVE_MEDICO, e.getCause());
+            throw new DatabaseAccessException(e.getMessage() + " " + MedicoRepository.class.getSimpleName());
+        }
     }
 }
