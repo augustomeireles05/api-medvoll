@@ -28,7 +28,7 @@ public class MedicoController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity<DadosAtualizacaoMedico> update(@RequestBody @Valid DadosAtualizacaoMedico dados) {
+    public ResponseEntity update(@RequestBody @Valid DadosAtualizacaoMedico dados) {
         return medicoUseCase.update(dados);
     }
 
@@ -45,7 +45,7 @@ public class MedicoController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        medicoUseCase.delete(id);
+    public ResponseEntity delete(@PathVariable Long id) {
+        return medicoUseCase.delete(id);
     }
 }

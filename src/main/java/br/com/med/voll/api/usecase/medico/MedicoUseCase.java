@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 
 public interface MedicoUseCase {
 
-    ResponseEntity<DadosCadastroMedico> save(DadosCadastroMedico dados);
+    ResponseEntity save(DadosCadastroMedico dados);
 
-    ResponseEntity<DadosAtualizacaoMedico> update(DadosAtualizacaoMedico dados);
+    ResponseEntity update(DadosAtualizacaoMedico dados);
 
     Page<DadosListagemMedico> listAll(Pageable page);
 

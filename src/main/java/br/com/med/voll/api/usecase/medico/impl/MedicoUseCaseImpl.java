@@ -7,6 +7,7 @@ import br.com.med.voll.api.domain.medico.DadosAtualizacaoMedico;
 import br.com.med.voll.api.domain.medico.DadosCadastroMedico;
 import br.com.med.voll.api.domain.medico.DadosListagemMedico;
 import br.com.med.voll.api.domain.medico.Medico;
+import br.com.med.voll.api.exception.DadosCadastroMedicoResponseError;
 import br.com.med.voll.api.repository.medico.MedicoRepository;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static br.com.med.voll.api.utils.Constants.ERROR_SAVE_MEDICO;
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_EMAIL;
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_CRM;
 
 @Component
 @Slf4j
@@ -37,19 +40,23 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
             HandlerValidation crmHandler = new CrmValidationHandler();
             emailHandler.setNext(crmHandler);
 
-            return emailHandler.validate(dados, medicoRepository);
+            ResponseEntity<?> validationResponse = emailHandler.validate(dados, medicoRepository);
+            if (validationResponse != null) {
+                return validationResponse; // Conflict detected, return the response
+            }
+
+            Medico medico = new Medico(dados);
+            medicoRepository.save(medico);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
-            log.error(ERROR_SAVE_MEDICO, e);
+            log.error(ERROR_SAVE_MEDICO, e.getCause());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-
-
-
     @Override
     @Transactional
-    public ResponseEntity<DadosAtualizacaoMedico> update(DadosAtualizacaoMedico dados) {
+    public ResponseEntity update(DadosAtualizacaoMedico dados) {
         try {
             Optional<Medico> optional = medicoRepository.findById(dados.id());
 
@@ -58,12 +65,12 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
 
                 // Check for duplicate email
                 if (!medicoExistente.getEmail().equals(dados.email()) && medicoRepository.existsByEmail(dados.email())) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroMedicoResponseError(ERROR_MESSAGE_DUPLICATE_EMAIL));
                 }
 
                 // Check for duplicate CRM
                 if (!medicoExistente.getCrm().equals(dados.crm()) && medicoRepository.existsByCrm(dados.crm())) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroMedicoResponseError(ERROR_MESSAGE_DUPLICATE_CRM));
                 }
 
                 medicoExistente.updateInfoMedico(dados);
@@ -73,7 +80,7 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } catch (Exception e) {
-            log.error(ERROR_SAVE_MEDICO, e);
+            log.error(ERROR_SAVE_MEDICO, e.getCause());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -92,21 +99,9 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> delete(Long id) {
-        try {
-            Optional<Medico> optional = medicoRepository.findById(id);
-
-            if (optional.isPresent()) {
-                Medico medicoExistente = optional.get();
-                medicoExistente.delete();
-                medicoRepository.save(medicoExistente);
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            log.error(ERROR_SAVE_MEDICO, e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity delete(Long id) {
+        Medico referenceById = medicoRepository.getReferenceById(id);
+        referenceById.delete();
+        return ResponseEntity.noContent().build();
     }
 }
