@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 public class Constants {
 
     public static final String ERROR_SAVE_MEDICO = "OCORREU UM ERRO AO TENTAR SALVAR MÉDICO!";
+    public static final String ERROR_MESSAGE_DUPLICATE_EMAIL = "O EMAIL INFORMADO JÁ ESTÁ EM USO!";
+    public static final String ERROR_MESSAGE_DUPLICATE_CRM = "O CRM INFORMADO JÁ ESTÁ EM USO!";
     public static final String ERROR_SAVE_PACIENTE = "OCORREU UM ERRO AO TENTAR SALVAR PACIENTE!";
 
     public static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd/MM/yyyy");
