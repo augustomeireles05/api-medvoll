@@ -1,4 +1,4 @@
-package br.com.med.voll.api.controller;
+package br.com.med.voll.api.adapters.controller;
 
 import br.com.med.voll.api.domain.paciente.DadosAtualizacaoPaciente;
 import br.com.med.voll.api.domain.paciente.DadosCadastroPaciente;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,14 +20,12 @@ public class PacienteController {
     private PacienteUseCase pacienteUseCase;
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<DadosCadastroPaciente> save(@RequestBody @Valid DadosCadastroPaciente dados) {
+    public ResponseEntity save(@RequestBody @Valid DadosCadastroPaciente dados) {
         return pacienteUseCase.save(dados);
     }
 
     @PutMapping
-    @Transactional
-    public ResponseEntity<DadosAtualizacaoPaciente> update(@RequestBody @Valid DadosAtualizacaoPaciente dados) {
+    public ResponseEntity update(@RequestBody @Valid DadosAtualizacaoPaciente dados) {
         return pacienteUseCase.update(dados);
     }
 
@@ -44,9 +41,14 @@ public class PacienteController {
         return ResponseEntity.ok().body(pacientes);
     }
 
+    @DeleteMapping("/desactive/{id}")
+    public ResponseEntity desactive(@PathVariable Long id) {
+        return pacienteUseCase.desactive(id);
+    }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        pacienteUseCase.delete(id);
+    public ResponseEntity delete(@PathVariable Long id) {
+        return pacienteUseCase.delete(id);
     }
 
 }

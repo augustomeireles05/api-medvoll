@@ -1,0 +1,1 @@
+alter table medicos add genero varchar(10) not null;

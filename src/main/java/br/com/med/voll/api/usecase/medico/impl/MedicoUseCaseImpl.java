@@ -1,13 +1,13 @@
 package br.com.med.voll.api.usecase.medico.impl;
 
-import br.com.med.voll.api.domain.chainofresponsibility.CrmValidationHandler;
-import br.com.med.voll.api.domain.chainofresponsibility.EmailValidationHandler;
-import br.com.med.voll.api.domain.chainofresponsibility.HandlerValidation;
+import br.com.med.voll.api.domain.chainofresponsibility.medico.CrmValidationHandler;
+import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoEmailValidationHandler;
+import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoHandlerValidation;
 import br.com.med.voll.api.domain.medico.DadosAtualizacaoMedico;
 import br.com.med.voll.api.domain.medico.DadosCadastroMedico;
 import br.com.med.voll.api.domain.medico.DadosListagemMedico;
 import br.com.med.voll.api.domain.medico.Medico;
-import br.com.med.voll.api.exception.DadosCadastroMedicoResponseError;
+import br.com.med.voll.api.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.repository.medico.MedicoRepository;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,8 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
     @Transactional
     public ResponseEntity save(DadosCadastroMedico dados) {
         try {
-            HandlerValidation emailHandler = new EmailValidationHandler();
-            HandlerValidation crmHandler = new CrmValidationHandler();
+            MedicoHandlerValidation emailHandler = new MedicoEmailValidationHandler();
+            MedicoHandlerValidation crmHandler = new CrmValidationHandler();
             emailHandler.setNext(crmHandler);
 
             ResponseEntity<?> validationResponse = emailHandler.validate(dados, medicoRepository);
@@ -65,12 +65,12 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
 
                 // Check for duplicate email
                 if (!medicoExistente.getEmail().equals(dados.email()) && medicoRepository.existsByEmail(dados.email())) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroMedicoResponseError(ERROR_MESSAGE_DUPLICATE_EMAIL));
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroResponseError(ERROR_MESSAGE_DUPLICATE_EMAIL));
                 }
 
                 // Check for duplicate CRM
                 if (!medicoExistente.getCrm().equals(dados.crm()) && medicoRepository.existsByCrm(dados.crm())) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroMedicoResponseError(ERROR_MESSAGE_DUPLICATE_CRM));
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroResponseError(ERROR_MESSAGE_DUPLICATE_CRM));
                 }
 
                 medicoExistente.updateInfoMedico(dados);
@@ -99,9 +99,16 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
 
     @Override
     @Transactional
-    public ResponseEntity delete(Long id) {
+    public ResponseEntity desactive(Long id) {
         Medico referenceById = medicoRepository.getReferenceById(id);
         referenceById.delete();
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity delete(Long id) {
+        medicoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

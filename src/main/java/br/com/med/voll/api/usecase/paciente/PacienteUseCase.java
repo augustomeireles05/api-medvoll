@@ -8,13 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface PacienteUseCase {
-    ResponseEntity<DadosCadastroPaciente> save(DadosCadastroPaciente dados);
+    ResponseEntity save(DadosCadastroPaciente dados);
 
-    ResponseEntity<DadosAtualizacaoPaciente> update(DadosAtualizacaoPaciente dados);
+    ResponseEntity update(DadosAtualizacaoPaciente dados);
 
     Page<DadosListagemPaciente> listAll(Pageable pageable);
 
     Page<DadosListagemPaciente> listAllActive(Pageable pageable);
 
-    void delete(Long id);
+    ResponseEntity desactive(Long id);
+
+    ResponseEntity delete(Long id);
 }

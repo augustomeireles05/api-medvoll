@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DadosCadastroMedicoResponseError {
-    public String errorMessage;
+public class DadosCadastroResponseError {
+    public String message;
 }

@@ -1,10 +1,13 @@
 package br.com.med.voll.api.usecase.paciente.impl;
 
+import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteCpfHandlerValidation;
+import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteEmailValidationHandler;
+import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteHandlerValidation;
 import br.com.med.voll.api.domain.paciente.DadosAtualizacaoPaciente;
 import br.com.med.voll.api.domain.paciente.DadosCadastroPaciente;
 import br.com.med.voll.api.domain.paciente.DadosListagemPaciente;
 import br.com.med.voll.api.domain.paciente.Paciente;
-import br.com.med.voll.api.exception.DatabaseAccessException;
+import br.com.med.voll.api.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.repository.paciente.PacienteRepository;
 import br.com.med.voll.api.usecase.paciente.PacienteUseCase;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_EMAIL;
 import static br.com.med.voll.api.utils.Constants.ERROR_SAVE_PACIENTE;
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_CPF;
 
 @Slf4j
 @Component
@@ -27,35 +33,52 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
     private PacienteRepository pacienteRepository;
 
     @Override
-    public ResponseEntity<DadosCadastroPaciente> save(DadosCadastroPaciente dados) {
+    @Transactional
+    public ResponseEntity save(DadosCadastroPaciente dados) {
         try {
+            PacienteHandlerValidation emailHandler = new PacienteEmailValidationHandler();
+            PacienteHandlerValidation cpfHandler = new PacienteCpfHandlerValidation();
+            emailHandler.setNext(cpfHandler);
+
+            ResponseEntity validationResponse = emailHandler.validate(dados, pacienteRepository);
+            if(validationResponse != null)
+                return validationResponse;
+
             Paciente paciente = new Paciente(dados);
             pacienteRepository.save(paciente);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+
         } catch(Exception e) {
             log.error(ERROR_SAVE_PACIENTE, e.getCause());
-            throw new DatabaseAccessException(e.getMessage() + " " + PacienteRepository.class.getSimpleName());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
-    public ResponseEntity<DadosAtualizacaoPaciente> update(DadosAtualizacaoPaciente dados) {
+    @Transactional
+    public ResponseEntity update(DadosAtualizacaoPaciente dados) {
         try {
-            Optional<Paciente> optional = pacienteRepository.findById(dados.id());
+            Optional<Paciente> optionalPaciente = pacienteRepository.findById(dados.id());
 
-            if(optional.isPresent()) {
-                Paciente pacienteExistente = optional.get();
+            if(optionalPaciente.isPresent()) {
+                Paciente pacienteExistente = optionalPaciente.get();
+
+                if(!pacienteExistente.getEmail().equals(dados.email()) && pacienteRepository.existsByEmail(dados.email()))
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroResponseError(ERROR_MESSAGE_DUPLICATE_EMAIL));
+
+                if(!pacienteExistente.getCpf().equals(dados.cpf()) && pacienteRepository.existsByCpf(dados.cpf()))
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroResponseError(ERROR_MESSAGE_DUPLICATE_CPF));
+
                 pacienteExistente.updateInfoPaciente(dados);
                 pacienteRepository.save(pacienteExistente);
-
                 return ResponseEntity.status(HttpStatus.OK).build();
-
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e) {
-         log.error(ERROR_SAVE_PACIENTE, e.getCause());
-         throw new DatabaseAccessException(e.getMessage() + " " + PacienteRepository.class.getSimpleName());
+
+        } catch(Exception e) {
+            log.error(ERROR_SAVE_PACIENTE, e.getCause());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -72,9 +95,18 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
     }
 
     @Override
-    public void delete(Long id) {
+    @Transactional
+    public ResponseEntity desactive(Long id) {
         Paciente referenceById = pacienteRepository.getReferenceById(id);
         referenceById.delete();
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity delete(Long id) {
+        pacienteRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,0 +1,1 @@
+alter table pacientes add genero varchar(10) not null;

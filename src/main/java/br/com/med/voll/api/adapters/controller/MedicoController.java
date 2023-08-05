@@ -1,4 +1,4 @@
-package br.com.med.voll.api.controller;
+package br.com.med.voll.api.adapters.controller;
 
 import br.com.med.voll.api.domain.medico.DadosAtualizacaoMedico;
 import br.com.med.voll.api.domain.medico.DadosCadastroMedico;
@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,13 +20,11 @@ public class MedicoController {
     private MedicoUseCase medicoUseCase;
 
     @PostMapping
-    @Transactional
     public ResponseEntity<DadosCadastroMedico> save(@RequestBody @Valid DadosCadastroMedico dados) {
         return medicoUseCase.save(dados);
     }
 
     @PutMapping
-    @Transactional
     public ResponseEntity update(@RequestBody @Valid DadosAtualizacaoMedico dados) {
         return medicoUseCase.update(dados);
     }
@@ -42,6 +39,11 @@ public class MedicoController {
     public ResponseEntity<Page<DadosListagemMedico>> listAllActive(@PageableDefault(size = 10, page = 0, sort= {"nome"}) Pageable page) {
         Page<DadosListagemMedico> medicos = medicoUseCase.listAllActive(page);
         return ResponseEntity.ok().body(medicos);
+    }
+
+    @DeleteMapping("/desactive/{id}")
+    public ResponseEntity desactive(@PathVariable Long id) {
+        return medicoUseCase.desactive(id);
     }
 
     @DeleteMapping("/{id}")
