@@ -3,10 +3,8 @@ package br.com.med.voll.api.usecase.medico.impl;
 import br.com.med.voll.api.domain.chainofresponsibility.medico.CrmValidationHandler;
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoEmailValidationHandler;
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoHandlerValidation;
-import br.com.med.voll.api.domain.medico.DadosAtualizacaoMedico;
-import br.com.med.voll.api.domain.medico.DadosCadastroMedico;
-import br.com.med.voll.api.domain.medico.DadosListagemMedico;
-import br.com.med.voll.api.domain.medico.Medico;
+import br.com.med.voll.api.domain.medico.*;
+import br.com.med.voll.api.domain.paciente.DadosDetalhamentoPaciente;
 import br.com.med.voll.api.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.repository.medico.MedicoRepository;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
@@ -74,8 +72,8 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
                 }
 
                 medicoExistente.updateInfoMedico(dados);
-                medicoRepository.save(medicoExistente);
-                return ResponseEntity.status(HttpStatus.OK).build();
+                Medico medico = medicoRepository.save(medicoExistente);
+                return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoMedico(medico));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }

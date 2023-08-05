@@ -3,10 +3,7 @@ package br.com.med.voll.api.usecase.paciente.impl;
 import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteCpfHandlerValidation;
 import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteEmailValidationHandler;
 import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteHandlerValidation;
-import br.com.med.voll.api.domain.paciente.DadosAtualizacaoPaciente;
-import br.com.med.voll.api.domain.paciente.DadosCadastroPaciente;
-import br.com.med.voll.api.domain.paciente.DadosListagemPaciente;
-import br.com.med.voll.api.domain.paciente.Paciente;
+import br.com.med.voll.api.domain.paciente.*;
 import br.com.med.voll.api.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.repository.paciente.PacienteRepository;
 import br.com.med.voll.api.usecase.paciente.PacienteUseCase;
@@ -70,8 +67,8 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosCadastroResponseError(ERROR_MESSAGE_DUPLICATE_CPF));
 
                 pacienteExistente.updateInfoPaciente(dados);
-                pacienteRepository.save(pacienteExistente);
-                return ResponseEntity.status(HttpStatus.OK).build();
+                Paciente paciente = pacienteRepository.save(pacienteExistente);
+                return ResponseEntity.status(HttpStatus.OK).body(new DadosDetalhamentoPaciente(paciente));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
