@@ -6,10 +6,11 @@ import br.com.med.voll.api.domain.medico.DadosListagemMedico;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public interface MedicoUseCase {
 
-    ResponseEntity save(DadosCadastroMedico dados);
+    ResponseEntity save(DadosCadastroMedico dados, UriComponentsBuilder uriBuilder);
 
     ResponseEntity update(DadosAtualizacaoMedico dados);
 

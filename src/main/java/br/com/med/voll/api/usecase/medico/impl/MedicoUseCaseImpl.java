@@ -4,7 +4,6 @@ import br.com.med.voll.api.domain.chainofresponsibility.medico.CrmValidationHand
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoEmailValidationHandler;
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoHandlerValidation;
 import br.com.med.voll.api.domain.medico.*;
-import br.com.med.voll.api.domain.paciente.DadosDetalhamentoPaciente;
 import br.com.med.voll.api.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.repository.medico.MedicoRepository;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
@@ -16,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 import static br.com.med.voll.api.utils.Constants.ERROR_SAVE_MEDICO;
@@ -32,7 +33,7 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
 
     @Override
     @Transactional
-    public ResponseEntity save(DadosCadastroMedico dados) {
+    public ResponseEntity save(DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
         try {
             MedicoHandlerValidation emailHandler = new MedicoEmailValidationHandler();
             MedicoHandlerValidation crmHandler = new CrmValidationHandler();
@@ -40,12 +41,14 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
 
             ResponseEntity<?> validationResponse = emailHandler.validate(dados, medicoRepository);
             if (validationResponse != null) {
-                return validationResponse; // Conflict detected, return the response
+                return validationResponse;
             }
 
             Medico medico = new Medico(dados);
             medicoRepository.save(medico);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+
+            URI uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
+            return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
         } catch (Exception e) {
             log.error(ERROR_SAVE_MEDICO, e.getCause());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

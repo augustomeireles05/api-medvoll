@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
 
     @Override
     @Transactional
-    public ResponseEntity save(DadosCadastroPaciente dados) {
+    public ResponseEntity save(DadosCadastroPaciente dados, UriComponentsBuilder uriBuilder) {
         try {
             PacienteHandlerValidation emailHandler = new PacienteEmailValidationHandler();
             PacienteHandlerValidation cpfHandler = new PacienteCpfHandlerValidation();
@@ -43,7 +44,9 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
 
             Paciente paciente = new Paciente(dados);
             pacienteRepository.save(paciente);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+
+            var uri = uriBuilder.path("pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
+            return ResponseEntity.created(uri).body(new DadosDetalhamentoPaciente(paciente));
 
         } catch(Exception e) {
             log.error(ERROR_SAVE_PACIENTE, e.getCause());

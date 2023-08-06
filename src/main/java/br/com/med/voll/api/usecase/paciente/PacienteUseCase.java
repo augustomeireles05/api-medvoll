@@ -6,9 +6,10 @@ import br.com.med.voll.api.domain.paciente.DadosListagemPaciente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 public interface PacienteUseCase {
-    ResponseEntity save(DadosCadastroPaciente dados);
+    ResponseEntity save(DadosCadastroPaciente dados, UriComponentsBuilder uriBuilder);
 
     ResponseEntity update(DadosAtualizacaoPaciente dados);
 

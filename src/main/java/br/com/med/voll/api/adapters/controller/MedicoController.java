@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("medicos")
@@ -20,8 +21,8 @@ public class MedicoController {
     private MedicoUseCase medicoUseCase;
 
     @PostMapping
-    public ResponseEntity<DadosCadastroMedico> save(@RequestBody @Valid DadosCadastroMedico dados) {
-        return medicoUseCase.save(dados);
+    public ResponseEntity save(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
+        return medicoUseCase.save(dados, uriBuilder);
     }
 
     @PutMapping
