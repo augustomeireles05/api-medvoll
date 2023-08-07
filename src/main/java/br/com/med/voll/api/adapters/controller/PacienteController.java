@@ -30,6 +30,11 @@ public class PacienteController {
         return pacienteUseCase.update(dados);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getPacienteById(@PathVariable Long id) {
+        return pacienteUseCase.getPacienteById(id);
+    }
+
     @GetMapping("/listAll")
     public ResponseEntity<Page<DadosListagemPaciente>> listAll(@PageableDefault(size = 10, sort={"nome"})Pageable pageable) {
         Page<DadosListagemPaciente> pacientes = pacienteUseCase.listAll(pageable);

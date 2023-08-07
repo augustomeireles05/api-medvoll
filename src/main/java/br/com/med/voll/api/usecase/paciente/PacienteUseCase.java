@@ -20,4 +20,6 @@ public interface PacienteUseCase {
     ResponseEntity desactive(Long id);
 
     ResponseEntity delete(Long id);
+
+    ResponseEntity getPacienteById(Long id);
 }

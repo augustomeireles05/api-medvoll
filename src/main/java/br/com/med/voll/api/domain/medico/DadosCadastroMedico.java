@@ -11,7 +11,7 @@ public record DadosCadastroMedico(
         @NotBlank(message = "Nome não pode estar em branco nem ser nulo.")
         String nome,
         @NotBlank(message = "Email não pode estar em branco nem ser nulo.")
-        @Email
+        @Email(message = "Formato do email é inválido.")
         String email,
         @NotBlank(message = "Telefone não pode estar em branco nem ser nulo.")
         String telefone,

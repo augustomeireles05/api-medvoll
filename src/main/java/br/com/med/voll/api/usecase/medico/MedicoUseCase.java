@@ -14,6 +14,8 @@ public interface MedicoUseCase {
 
     ResponseEntity update(DadosAtualizacaoMedico dados);
 
+    ResponseEntity getMedicoById(Long id);
+
     Page<DadosListagemMedico> listAll(Pageable page);
 
     Page<DadosListagemMedico> listAllActive(Pageable page);

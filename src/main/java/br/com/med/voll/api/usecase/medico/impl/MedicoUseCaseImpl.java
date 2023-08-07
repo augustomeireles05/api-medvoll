@@ -5,6 +5,7 @@ import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoEmailValida
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoHandlerValidation;
 import br.com.med.voll.api.domain.medico.*;
 import br.com.med.voll.api.exception.DadosCadastroResponseError;
+import br.com.med.voll.api.exception.NotFoundException;
 import br.com.med.voll.api.repository.medico.MedicoRepository;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import static br.com.med.voll.api.utils.Constants.ERROR_SAVE_MEDICO;
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_EMAIL;
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_CRM;
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_NOT_FOUND_MEDICO;
 
 @Component
 @Slf4j
@@ -83,6 +85,18 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
         } catch (Exception e) {
             log.error(ERROR_SAVE_MEDICO, e.getCause());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @Override
+    public ResponseEntity getMedicoById(Long id) {
+        try {
+            Medico medico = medicoRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException(String.format(ERROR_MESSAGE_NOT_FOUND_MEDICO, id)));
+            return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
+        } catch(NotFoundException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
 

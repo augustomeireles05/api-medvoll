@@ -11,3 +11,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+#nunca exibir o stackTrace em retornos de erros
+server:
+  error:
+    include-stacktrace: never

@@ -5,6 +5,7 @@ import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteEmailVa
 import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteHandlerValidation;
 import br.com.med.voll.api.domain.paciente.*;
 import br.com.med.voll.api.exception.DadosCadastroResponseError;
+import br.com.med.voll.api.exception.NotFoundException;
 import br.com.med.voll.api.repository.paciente.PacienteRepository;
 import br.com.med.voll.api.usecase.paciente.PacienteUseCase;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_EMAIL;
 import static br.com.med.voll.api.utils.Constants.ERROR_SAVE_PACIENTE;
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_CPF;
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_NOT_FOUND_PACIENTE;
 
 @Slf4j
 @Component
@@ -83,6 +85,18 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
     }
 
     @Override
+    public ResponseEntity getPacienteById(Long id) {
+        try {
+            Paciente paciente = pacienteRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException(String.format(ERROR_MESSAGE_NOT_FOUND_PACIENTE, id)));
+            return ResponseEntity.ok(new DadosDetalhamentoPaciente(paciente));
+        } catch (NotFoundException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
     public Page<DadosListagemPaciente> listAll(Pageable pageable) {
         Page<Paciente> pacientes = pacienteRepository.findAll(pageable);
         return pacientes.map(DadosListagemPaciente::new);
@@ -108,5 +122,4 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
         pacienteRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }
