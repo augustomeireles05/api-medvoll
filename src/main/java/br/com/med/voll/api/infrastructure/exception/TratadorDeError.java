@@ -1,6 +1,6 @@
-package br.com.med.voll.api.infrastructure;
+package br.com.med.voll.api.infrastructure.exception;
 
-import br.com.med.voll.api.exception.DadosErroValidacao;
+import br.com.med.voll.api.infrastructure.exception.DadosErroValidacao;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

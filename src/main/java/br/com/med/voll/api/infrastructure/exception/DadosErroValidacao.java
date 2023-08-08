@@ -1,4 +1,4 @@
-package br.com.med.voll.api.exception;
+package br.com.med.voll.api.infrastructure.exception;
 
 import org.springframework.validation.FieldError;
 

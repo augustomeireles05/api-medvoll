@@ -1,4 +1,4 @@
-package br.com.med.voll.api.repository.medico;
+package br.com.med.voll.api.infrastructure.integration.repository.medico;
 
 import br.com.med.voll.api.domain.medico.Medico;
 import org.springframework.data.domain.Page;

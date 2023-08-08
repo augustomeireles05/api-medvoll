@@ -1,8 +1,8 @@
 package br.com.med.voll.api.domain.chainofresponsibility.paciente;
 
 import br.com.med.voll.api.domain.paciente.DadosCadastroPaciente;
-import br.com.med.voll.api.exception.DadosCadastroResponseError;
-import br.com.med.voll.api.repository.paciente.PacienteRepository;
+import br.com.med.voll.api.infrastructure.exception.DadosCadastroResponseError;
+import br.com.med.voll.api.infrastructure.integration.repository.paciente.PacienteRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

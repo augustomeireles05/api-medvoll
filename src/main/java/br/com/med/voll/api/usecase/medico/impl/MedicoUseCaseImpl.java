@@ -4,9 +4,9 @@ import br.com.med.voll.api.domain.chainofresponsibility.medico.CrmValidationHand
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoEmailValidationHandler;
 import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoHandlerValidation;
 import br.com.med.voll.api.domain.medico.*;
-import br.com.med.voll.api.exception.DadosCadastroResponseError;
-import br.com.med.voll.api.exception.NotFoundException;
-import br.com.med.voll.api.repository.medico.MedicoRepository;
+import br.com.med.voll.api.infrastructure.exception.DadosCadastroResponseError;
+import br.com.med.voll.api.infrastructure.exception.NotFoundException;
+import br.com.med.voll.api.infrastructure.integration.repository.medico.MedicoRepository;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
