@@ -34,7 +34,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     /**
-     * @return horario de geração acrescida de 2 horas transformando o return em um objeto instant e acrescentando o timezone de -3 horas em relacao ao Greenwitch
+     * @return horario de geração acrescida de 2 horas transformando o return em um objeto instant e acrescentando o timezone de -3 horas que o brasil possui em relação ao meridiano de Greenwitch
      */
     private Instant dataExpiracao() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
