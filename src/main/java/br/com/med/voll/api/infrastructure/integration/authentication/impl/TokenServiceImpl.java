@@ -28,7 +28,7 @@ public class TokenServiceImpl implements TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("API Voll.med")
+                    .withIssuer(WITH_ISSUER)
                     .withSubject(usuario.getLogin())
                     .withClaim("id", usuario.getId())
                     .withExpiresAt(dataExpiracao())
@@ -48,7 +48,7 @@ public class TokenServiceImpl implements TokenService {
         try {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
-                    .withIssuer("API Voll.med")
+                    .withIssuer(WITH_ISSUER)
                     .build()
                     .verify(tokenJWT)
                     .getSubject();
