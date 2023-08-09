@@ -11,7 +11,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
 #nunca exibir o stackTrace em retornos de erros
 server:
   error:
     include-stacktrace: never
+
+api:
+  security:
+    token:
+      secret: '${JWT_SECRET:12345678}'
