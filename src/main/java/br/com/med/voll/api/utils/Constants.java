@@ -17,7 +17,6 @@ public class Constants {
     public static final String WITH_ISSUER = "API Voll.med";
     public static final String ERROR_GET_TOKEN_INVALID_OR_EXPIRED = "TOKEN JWT INVÁLIDO OU EXPIRADO!";
     public static final String ERROR_GENERATE_TOKEN = "ERRO AO GERAR TOKEN JWT!";
-    public static final String ERROR_NON_SENT_TOKEN_AT_HEADER = "TOKEN JWT NÃO ENVIADO NO CABEÇALHO AUTHORIZATION!";
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
