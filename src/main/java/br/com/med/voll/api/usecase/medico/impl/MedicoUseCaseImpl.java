@@ -1,8 +1,8 @@
 package br.com.med.voll.api.usecase.medico.impl;
 
-import br.com.med.voll.api.domain.chainofresponsibility.medico.CrmValidationHandler;
-import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoEmailValidationHandler;
-import br.com.med.voll.api.domain.chainofresponsibility.medico.MedicoHandlerValidation;
+import br.com.med.voll.api.domain.validations.chainofresponsibility.medico.CrmValidationHandler;
+import br.com.med.voll.api.domain.validations.chainofresponsibility.medico.MedicoEmailValidationHandler;
+import br.com.med.voll.api.domain.validations.chainofresponsibility.medico.MedicoHandlerValidation;
 import br.com.med.voll.api.domain.medico.*;
 import br.com.med.voll.api.infrastructure.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.infrastructure.exception.NotFoundException;

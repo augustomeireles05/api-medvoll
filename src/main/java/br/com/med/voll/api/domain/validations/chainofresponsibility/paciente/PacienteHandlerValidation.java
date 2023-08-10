@@ -1,4 +1,4 @@
-package br.com.med.voll.api.domain.chainofresponsibility.paciente;
+package br.com.med.voll.api.domain.validations.chainofresponsibility.paciente;
 
 import br.com.med.voll.api.domain.paciente.DadosCadastroPaciente;
 import br.com.med.voll.api.infrastructure.integration.repository.paciente.PacienteRepository;

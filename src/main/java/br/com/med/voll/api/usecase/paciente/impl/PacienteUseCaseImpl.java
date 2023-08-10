@@ -1,8 +1,8 @@
 package br.com.med.voll.api.usecase.paciente.impl;
 
-import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteCpfHandlerValidation;
-import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteEmailValidationHandler;
-import br.com.med.voll.api.domain.chainofresponsibility.paciente.PacienteHandlerValidation;
+import br.com.med.voll.api.domain.validations.chainofresponsibility.paciente.PacienteCpfHandlerValidation;
+import br.com.med.voll.api.domain.validations.chainofresponsibility.paciente.PacienteEmailValidationHandler;
+import br.com.med.voll.api.domain.validations.chainofresponsibility.paciente.PacienteHandlerValidation;
 import br.com.med.voll.api.domain.paciente.*;
 import br.com.med.voll.api.infrastructure.exception.DadosCadastroResponseError;
 import br.com.med.voll.api.infrastructure.exception.NotFoundException;

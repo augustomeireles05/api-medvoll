@@ -55,4 +55,9 @@ public class TratadorDeError {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " +ex.getLocalizedMessage());
     }
 
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity tratarErroRegraDeNegocio(ValidacaoException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
 }

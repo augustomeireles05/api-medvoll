@@ -1,4 +1,4 @@
-package br.com.med.voll.api.domain.chainofresponsibility.medico;
+package br.com.med.voll.api.domain.validations.chainofresponsibility.medico;
 
 
 import br.com.med.voll.api.domain.medico.DadosCadastroMedico;
