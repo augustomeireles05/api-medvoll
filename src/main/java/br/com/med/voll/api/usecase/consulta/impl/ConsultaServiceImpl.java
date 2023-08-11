@@ -1,12 +1,9 @@
 package br.com.med.voll.api.usecase.consulta.impl;
 
-import br.com.med.voll.api.domain.consulta.Consulta;
-import br.com.med.voll.api.domain.consulta.DadosAgendamentoConsulta;
-import br.com.med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
-import br.com.med.voll.api.domain.consulta.DadosListagemConsulta;
+import br.com.med.voll.api.domain.consulta.*;
 import br.com.med.voll.api.domain.medico.Medico;
-import br.com.med.voll.api.domain.paciente.Paciente;
 import br.com.med.voll.api.domain.validations.strategy.consulta.AgendamentoConsultaValidation;
+import br.com.med.voll.api.domain.validations.strategy.consulta.CancelamentoConsultaValidation;
 import br.com.med.voll.api.infrastructure.exception.*;
 import br.com.med.voll.api.infrastructure.integration.repository.consulta.ConsultaRepository;
 import br.com.med.voll.api.infrastructure.integration.repository.medico.MedicoRepository;
@@ -24,7 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 
-import static br.com.med.voll.api.utils.Constants.*;
+
+import static br.com.med.voll.api.utils.Constants.NOT_EXIST_ID_MEDICO;
+import static br.com.med.voll.api.utils.Constants.NOT_EXIST_ID_PACIENTE;
+import static br.com.med.voll.api.utils.Constants.NO_AVAILABLE_DOCTOR_FOR_CHOSEN_DATE;
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_NOT_FOUND_CONSULTA;
+import static br.com.med.voll.api.utils.Constants.REQUIRED_SPECIALITY;
+import static br.com.med.voll.api.utils.Constants.ERROR_DETELE_CONSULTA;
 
 @Service
 public class ConsultaServiceImpl implements ConsultaService {
@@ -40,6 +43,9 @@ public class ConsultaServiceImpl implements ConsultaService {
 
     @Autowired
     private List<AgendamentoConsultaValidation> validations;
+
+    @Autowired
+    private List<CancelamentoConsultaValidation> validadoresCancelamento;
 
     @Override
     @Transactional
@@ -66,7 +72,7 @@ public class ConsultaServiceImpl implements ConsultaService {
         if(medico == null)
             throw new ValidacaoException(NO_AVAILABLE_DOCTOR_FOR_CHOSEN_DATE);
 
-        Consulta consulta = new Consulta(null, medico, paciente, dados.data());
+        Consulta consulta = new Consulta(null, medico, paciente, dados.data(), null);
         consultaRepository.save(consulta);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));
@@ -94,6 +100,20 @@ public class ConsultaServiceImpl implements ConsultaService {
     public Page<DadosListagemConsulta> listAll(Pageable page) {
         Page<Consulta> consultas = consultaRepository.findAll(page);
         return consultas.map(DadosListagemConsulta::new);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity delete(DadosCancelamentoConsulta dados) {
+
+        if(!consultaRepository.existsById(dados.idConsulta()))
+            throw new ValidacaoException(ERROR_DETELE_CONSULTA);
+
+        validadoresCancelamento.forEach(v -> v.validate(dados));
+
+        var consulta = consultaRepository.getReferenceById(dados.idConsulta());
+        consulta.delete(dados.motivo());
+        return ResponseEntity.noContent().build();
     }
 
     /**

@@ -1,6 +1,7 @@
 package br.com.med.voll.api.usecase.consulta;
 
 import br.com.med.voll.api.domain.consulta.DadosAgendamentoConsulta;
+import br.com.med.voll.api.domain.consulta.DadosCancelamentoConsulta;
 import br.com.med.voll.api.domain.consulta.DadosListagemConsulta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,6 @@ public interface ConsultaService {
     ResponseEntity<Page<DadosListagemConsulta>> getConsultaByCpfPaciente(String cpf, Pageable page);
 
     Page<DadosListagemConsulta> listAll(Pageable page);
+
+    ResponseEntity delete(DadosCancelamentoConsulta dados);
 }

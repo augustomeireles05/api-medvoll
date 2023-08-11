@@ -32,6 +32,8 @@ public class Constants {
     public static final String NO_AVAILABLE_DOCTOR_FOR_CHOSEN_DATE = "NÃO EXISTE MÉDICO DISPONÍVEL NESSA DATA.";
     public static final String ERROR_MESSAGE_NOT_FOUND_CONSULTA = "NÃO FOI ENCONTRADO CONSULTA PARA O CPF %s.";
 
+    public static final String ERROR_DETELE_CONSULTA = "O ID DA CONSULTA INFORMADO NÃO EXISTE.";
+    public static final String ERROR_CANCEL_CONSULTA = "CONSULTA SOMENTE PODE SER CANCELADA COM ANTECEDÊNCIA MÍNIMA DE 24h.";
 
     public static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     public static final DateTimeFormatter HOUR_PATTERN = DateTimeFormatter.ofPattern("HH:mm");

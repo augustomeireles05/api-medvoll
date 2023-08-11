@@ -1,4 +1,4 @@
-package br.com.med.voll.api.domain.validations.strategy.consulta.impl;
+package br.com.med.voll.api.domain.validations.strategy.consulta.impl.agendamento;
 
 import br.com.med.voll.api.domain.consulta.DadosAgendamentoConsulta;
 import br.com.med.voll.api.domain.validations.strategy.consulta.AgendamentoConsultaValidation;
