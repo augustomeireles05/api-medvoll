@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +30,7 @@ import static br.com.med.voll.api.utils.Constants.NO_AVAILABLE_DOCTOR_FOR_CHOSEN
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_NOT_FOUND_CONSULTA;
 import static br.com.med.voll.api.utils.Constants.REQUIRED_SPECIALITY;
 import static br.com.med.voll.api.utils.Constants.ERROR_DETELE_CONSULTA;
+import static br.com.med.voll.api.utils.Constants.DATE_PATTERN_WITH_HOUR;
 
 @Service
 public class ConsultaServiceImpl implements ConsultaService {
@@ -72,7 +75,11 @@ public class ConsultaServiceImpl implements ConsultaService {
         if(medico == null)
             throw new ValidacaoException(NO_AVAILABLE_DOCTOR_FOR_CHOSEN_DATE);
 
-        Consulta consulta = new Consulta(null, medico, paciente, dados.data(), null);
+        //conversão de data para o formato padrão antes de salvar
+        DateTimeFormatter formatter = DATE_PATTERN_WITH_HOUR;
+        LocalDateTime dataConsulta = LocalDateTime.parse(dados.data().format(formatter), formatter);
+
+        Consulta consulta = new Consulta(null, medico, paciente, dataConsulta, null);
         consultaRepository.save(consulta);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));

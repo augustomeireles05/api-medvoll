@@ -32,6 +32,7 @@ public record DadosAgendamentoConsulta(
 
         @NotNull(message = "A data não pode ser nula.")
         @Future(message = "A data deve ser marcada no futuro.")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm")
         LocalDateTime data,
 
         Especialidade especialidade

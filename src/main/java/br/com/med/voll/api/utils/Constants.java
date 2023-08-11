@@ -35,7 +35,6 @@ public class Constants {
     public static final String ERROR_DETELE_CONSULTA = "O ID DA CONSULTA INFORMADO NÃO EXISTE.";
     public static final String ERROR_CANCEL_CONSULTA = "CONSULTA SOMENTE PODE SER CANCELADA COM ANTECEDÊNCIA MÍNIMA DE 24h.";
 
-    public static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    public static final DateTimeFormatter HOUR_PATTERN = DateTimeFormatter.ofPattern("HH:mm");
+    public static final DateTimeFormatter DATE_PATTERN_WITH_HOUR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
 }
