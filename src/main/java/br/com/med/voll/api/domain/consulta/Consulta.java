@@ -8,7 +8,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Table(name = "consultas")
 @Entity(name = "Consulta")
@@ -35,6 +37,9 @@ public class Consulta {
     @Column(name = "motivo_cancelamento")
     @Enumerated(EnumType.STRING)
     private MotivoCancelamento motivoCancelamento;
+
+    @Column(name = "dt_hr_solicitacao_agendamento", columnDefinition = "TIMESTAMP")
+    private LocalDateTime dataHoraSolicitacaoAgendamento = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
 
     public void delete(MotivoCancelamento motivo) {
         this.motivoCancelamento = motivo;

@@ -79,7 +79,7 @@ public class ConsultaServiceImpl implements ConsultaService {
         DateTimeFormatter formatter = DATE_PATTERN_WITH_HOUR;
         LocalDateTime dataConsulta = LocalDateTime.parse(dados.data().format(formatter), formatter);
 
-        Consulta consulta = new Consulta(null, medico, paciente, dataConsulta, null);
+        Consulta consulta = new Consulta(null, medico, paciente, dataConsulta, null, LocalDateTime.now());
         consultaRepository.save(consulta);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));

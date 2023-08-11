@@ -37,4 +37,6 @@ public class Constants {
 
     public static final DateTimeFormatter DATE_PATTERN_WITH_HOUR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
+    public static final DateTimeFormatter STANDARD_PATTERN_TIMESTAMP_WITHOUT_SECONDS = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
 }

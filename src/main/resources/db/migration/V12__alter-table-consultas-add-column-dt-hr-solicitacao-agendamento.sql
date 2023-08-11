@@ -1,0 +1,1 @@
+ALTER TABLE consultas ADD COLUMN dt_hr_solicitacao_agendamento TIMESTAMP;
