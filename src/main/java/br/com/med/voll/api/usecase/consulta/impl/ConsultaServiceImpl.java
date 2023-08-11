@@ -5,25 +5,26 @@ import br.com.med.voll.api.domain.consulta.DadosAgendamentoConsulta;
 import br.com.med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
 import br.com.med.voll.api.domain.consulta.DadosListagemConsulta;
 import br.com.med.voll.api.domain.medico.Medico;
+import br.com.med.voll.api.domain.paciente.Paciente;
 import br.com.med.voll.api.domain.validations.strategy.consulta.AgendamentoConsultaValidation;
-import br.com.med.voll.api.infrastructure.exception.ValidacaoException;
+import br.com.med.voll.api.infrastructure.exception.*;
 import br.com.med.voll.api.infrastructure.integration.repository.consulta.ConsultaRepository;
 import br.com.med.voll.api.infrastructure.integration.repository.medico.MedicoRepository;
 import br.com.med.voll.api.infrastructure.integration.repository.paciente.PacienteRepository;
 import br.com.med.voll.api.usecase.consulta.ConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
-import static br.com.med.voll.api.utils.Constants.NOT_EXIST_ID_PACIENTE;
-import static br.com.med.voll.api.utils.Constants.NOT_EXIST_ID_MEDICO;
-import static br.com.med.voll.api.utils.Constants.REQUIRED_SPECIALITY;
-import static br.com.med.voll.api.utils.Constants.NO_AVAILABLE_DOCTOR_FOR_CHOSEN_DATE;
+import static br.com.med.voll.api.utils.Constants.*;
 
 @Service
 public class ConsultaServiceImpl implements ConsultaService {
@@ -69,6 +70,24 @@ public class ConsultaServiceImpl implements ConsultaService {
         consultaRepository.save(consulta);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));
+    }
+
+    @Override
+    public ResponseEntity getConsultaById(Long id) {
+        Consulta consulta = consultaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format(ERROR_MESSAGE_NOT_FOUND_CONSULTA, id)));
+            return ResponseEntity.ok().body(new DadosDetalhamentoConsulta(consulta));
+    }
+
+    @Override
+    public ResponseEntity<Page<DadosListagemConsulta>> getConsultaByCpfPaciente(String cpf, Pageable page) {
+        var consultasPaciente = consultaRepository.getConsultaPacienteByCpf(cpf, page);
+
+        if (consultasPaciente.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new PageImpl<>(Collections.emptyList(), page, 0));
+
+        Page<DadosListagemConsulta> dadosConsultas = consultasPaciente.map(DadosListagemConsulta::new);
+        return ResponseEntity.ok().body(dadosConsultas);
     }
 
     @Override

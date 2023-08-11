@@ -24,6 +24,16 @@ public class ConsultaController {
         return service.schedule(dados);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getConsultaById(@PathVariable Long id) {
+        return service.getConsultaById(id);
+    }
+
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<Page<DadosListagemConsulta>> getConsultaByCpfPaciente(@PathVariable String cpf, @PageableDefault(size = 10) Pageable page) {
+        return service.getConsultaByCpfPaciente(cpf, page);
+    }
+
     @GetMapping("/listAll")
     public ResponseEntity<Page<DadosListagemConsulta>> listAll(@PageableDefault(size = 10)Pageable page) {
         Page<DadosListagemConsulta> consultas = service.listAll(page);

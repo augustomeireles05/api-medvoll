@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.naming.AuthenticationException;
 import java.nio.file.AccessDeniedException;
 
+import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_NOT_FOUND_CONSULTA;
+
 @RestControllerAdvice
 public class TratadorDeError {
 
@@ -58,6 +60,11 @@ public class TratadorDeError {
     @ExceptionHandler(ValidacaoException.class)
     public ResponseEntity tratarErroRegraDeNegocio(ValidacaoException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity notFoundException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new DadosCadastroResponseError(ERROR_MESSAGE_NOT_FOUND_CONSULTA));
     }
 
 }

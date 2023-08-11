@@ -10,5 +10,9 @@ public interface ConsultaService {
 
     ResponseEntity schedule(DadosAgendamentoConsulta dados);
 
+    ResponseEntity getConsultaById(Long id);
+
+    ResponseEntity<Page<DadosListagemConsulta>> getConsultaByCpfPaciente(String cpf, Pageable page);
+
     Page<DadosListagemConsulta> listAll(Pageable page);
 }

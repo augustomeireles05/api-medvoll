@@ -30,6 +30,8 @@ public class Constants {
     public static final String CANNOT_SCHEDULE_WITH_DELETED_PATIENT = "CONSULTA NÃO PODE SER AGENDADA COM PACIENTE EXCLUÍDO.";
     public static final String PATIENT_ALREADY_HAS_APPOINTMENT_ON_THIS_DAY = "PACIENTE JÁ POSSUI UMA CONSULTA AGENDADA NESSE DIA.";
     public static final String NO_AVAILABLE_DOCTOR_FOR_CHOSEN_DATE = "NÃO EXISTE MÉDICO DISPONÍVEL NESSA DATA.";
+    public static final String ERROR_MESSAGE_NOT_FOUND_CONSULTA = "NÃO FOI ENCONTRADO CONSULTA PARA O CPF %s.";
+
 
     public static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     public static final DateTimeFormatter HOUR_PATTERN = DateTimeFormatter.ofPattern("HH:mm");
