@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,8 +26,8 @@ import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_EMAIL;
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_DUPLICATE_CRM;
 import static br.com.med.voll.api.utils.Constants.ERROR_MESSAGE_NOT_FOUND_MEDICO;
 
-@Component
 @Slf4j
+@Service
 public class MedicoUseCaseImpl implements MedicoUseCase {
 
     @Autowired

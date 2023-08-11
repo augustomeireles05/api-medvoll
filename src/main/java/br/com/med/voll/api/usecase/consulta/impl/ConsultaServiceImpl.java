@@ -3,6 +3,7 @@ package br.com.med.voll.api.usecase.consulta.impl;
 import br.com.med.voll.api.domain.consulta.Consulta;
 import br.com.med.voll.api.domain.consulta.DadosAgendamentoConsulta;
 import br.com.med.voll.api.domain.consulta.DadosDetalhamentoConsulta;
+import br.com.med.voll.api.domain.consulta.DadosListagemConsulta;
 import br.com.med.voll.api.domain.medico.Medico;
 import br.com.med.voll.api.domain.validations.strategy.consulta.AgendamentoConsultaValidation;
 import br.com.med.voll.api.infrastructure.exception.ValidacaoException;
@@ -11,6 +12,8 @@ import br.com.med.voll.api.infrastructure.integration.repository.medico.MedicoRe
 import br.com.med.voll.api.infrastructure.integration.repository.paciente.PacienteRepository;
 import br.com.med.voll.api.usecase.consulta.ConsultaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +69,12 @@ public class ConsultaServiceImpl implements ConsultaService {
         consultaRepository.save(consulta);
 
         return ResponseEntity.ok(new DadosDetalhamentoConsulta(consulta));
+    }
+
+    @Override
+    public Page<DadosListagemConsulta> listAll(Pageable page) {
+        Page<Consulta> consultas = consultaRepository.findAll(page);
+        return consultas.map(DadosListagemConsulta::new);
     }
 
     /**
