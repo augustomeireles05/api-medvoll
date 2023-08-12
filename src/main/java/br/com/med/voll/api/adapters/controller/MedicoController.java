@@ -4,6 +4,7 @@ import br.com.med.voll.api.domain.medico.DadosAtualizacaoMedico;
 import br.com.med.voll.api.domain.medico.DadosCadastroMedico;
 import br.com.med.voll.api.domain.medico.DadosListagemMedico;
 import br.com.med.voll.api.usecase.medico.MedicoUseCase;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("medicos")
+@SecurityRequirement(name = "bearer-key")
 public class MedicoController {
 
     @Autowired

@@ -67,7 +67,6 @@ public class ConsultaServiceImpl implements ConsultaService {
             // D -> This class depends on abstraction (List<AgendamentoConsultaValidation>), but not on the specific validations that exist.
         validations.forEach(v -> v.validate(dados));
 
-
         var medico = chooseMedico(dados);
         var paciente = pacienteRepository.getReferenceById(dados.idPaciente());
 

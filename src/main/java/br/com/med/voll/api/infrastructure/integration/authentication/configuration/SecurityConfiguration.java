@@ -33,6 +33,8 @@ public class SecurityConfiguration {
      * transformação para tipo STATELESS
      * cria um objeto do tipo SecurityFilterChain
      *
+     * Para acessar a doc do projeto, basta acessar as URLs: http://localhost:8080/v3/api-docs ou http://localhost:8080/swagger-ui.html
+     *
      * @param http
      * @return
      * @throws Exception
@@ -43,6 +45,7 @@ public class SecurityConfiguration {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/authentication").permitAll();
+                    req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
