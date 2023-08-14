@@ -1,4 +1,4 @@
-package br.com.med.voll.api.infrastructure.integration.repository.medico;
+package br.com.med.voll.api.infrastructure.integration.repository.consulta;
 
 import br.com.med.voll.api.domain.DadosEndereco;
 import br.com.med.voll.api.domain.consulta.Consulta;
