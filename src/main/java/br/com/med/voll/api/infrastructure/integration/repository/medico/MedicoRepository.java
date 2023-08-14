@@ -2,7 +2,6 @@ package br.com.med.voll.api.infrastructure.integration.repository.medico;
 
 import br.com.med.voll.api.domain.medico.Especialidade;
 import br.com.med.voll.api.domain.medico.Medico;
-import jakarta.websocket.server.PathParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
