@@ -1,8 +1,6 @@
 package br.com.med.voll.api.domain.consulta;
 
-import br.com.med.voll.api.domain.medico.DadosDetalhamentoMedico;
 import br.com.med.voll.api.domain.medico.DadosDetalhamentoMedicoParaDetalheConsulta;
-import br.com.med.voll.api.domain.paciente.DadosDetalhamentoPaciente;
 import br.com.med.voll.api.domain.paciente.DadosDetalhamentoPacienteParaDetalheConsulta;
 
 import java.time.LocalDateTime;

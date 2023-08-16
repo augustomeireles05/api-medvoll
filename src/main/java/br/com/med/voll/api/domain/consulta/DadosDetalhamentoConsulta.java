@@ -1,7 +1,6 @@
 package br.com.med.voll.api.domain.consulta;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static br.com.med.voll.api.utils.Constants.STANDARD_PATTERN_TIMESTAMP_WITHOUT_SECONDS;
 public record DadosDetalhamentoConsulta(Long id, Long idMedico, Long idPaciente, LocalDateTime data, String dataHoraSolicitacaoAgendamento) {
